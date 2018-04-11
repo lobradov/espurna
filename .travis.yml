@@ -6,7 +6,8 @@ cache:
   pip: true
   directories:
   - "~/.platformio"
-  - "code/node_modules"    # 25sec speed improvement
+  - "code/node_modules"    # 25s speed improvement
+  - "code/.piolibdeps"     # around 1m30s improvement
 install:
 - pip install -U platformio
 - pio update
