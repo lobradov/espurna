@@ -6,8 +6,10 @@ cache:
   pip: true
   directories:
   - "~/.platformio"
+  - "code/node_modules"    # 25sec speed improvement
 install:
 - pip install -U platformio
+- pio update
 - cd code ; npm install --only=dev ; cd ..
 - cd code ; pio lib -g install ; cd ..
 script:
