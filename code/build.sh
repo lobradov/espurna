@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 # Welcome
 echo "--------------------------------------------------------------"
 echo "ESPURNA FIRMWARE BUILDER"
@@ -8,16 +10,30 @@ echo "ESPURNA FIRMWARE BUILDER"
 travis=$(grep env: platformio.ini | grep travis | sed 's/\[env://' | sed 's/\]/ /' | sort)
 available=$(grep env: platformio.ini | grep -v ota  | grep -v ssl  | grep -v travis | sed 's/\[env://' | sed 's/\]/ /' | sort)
 
-# Parameters
-environments=$@
-if [ "$environments" == "list" ]; then
-    echo "--------------------------------------------------------------"
-    echo "Available environments:"
-    for environment in $available; do
+
+while getopts "lp:" opt; do
+  case $opt in
+    l)
+      echo "--------------------------------------------------------------"
+      echo "Available environments:"
+      for environment in $available; do
         echo "* $environment"
-    done
-    exit
-fi
+      done
+      exit
+      ;;
+    p)
+      par_build=1
+      if [ ${OPTARG} -eq ${OPTARG} ]; then
+        par_thread=${OPTARG}
+      else
+        echo Parallel threads should be a number.
+        exit
+      fi
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
 
 # Environments to build
 if [ $# -eq 0 ]; then
@@ -62,7 +78,14 @@ node node_modules/gulp/bin/gulp.js || exit
 echo "--------------------------------------------------------------"
 echo "Building firmware images..."
 mkdir -p ../firmware/espurna-$version
-for environment in $environments; do
+
+if [ ${par_build} ]; then
+  to_build=`echo ${environments} | awk -v par_thread=${par_thread} '{ for (i = 1; i <= NF; i++) if (++j % 3 == par_thread ) print \$i; }'`
+else
+  to_build=${environments}
+fi
+
+for environment in $to_build; do
     echo "* espurna-$version-$environment.bin"
     platformio run --silent --environment $environment || break
     mv .pioenvs/$environment/firmware.bin ../firmware/espurna-$version/espurna-$version-$environment.bin

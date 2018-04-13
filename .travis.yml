@@ -9,12 +9,19 @@ cache:
   - "code/node_modules"    # 25s speed improvement
   - "code/.piolibdeps"     # around 1m30s improvement, retrigger
 install:
-- pip install -U platformio
-- pio update
-- cd code ; npm install --only=dev ; cd ..
-- cd code ; pio lib -g install ; cd ..
+  - pip install -U platformio
+  - pio update
+  - cd code ; npm install --only=dev ; cd ..
+  - cd code ; pio lib -g install ; cd ..
+
+env:
+  - PARALLEL=0
+  - PARALLEL=1
+  - PARALLEL=2
+
 script:
-- cd code && ./build.sh &&  cd ..
+- cd code && ./build.sh -p ${PARALLEL} &&  cd ..
+
 before_deploy:
 - mv firmware/*/espurna-*.bin firmware/
 deploy:
