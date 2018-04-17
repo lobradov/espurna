@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -ex
-
 # Welcome
 echo "--------------------------------------------------------------"
 echo "ESPURNA FIRMWARE BUILDER"
