@@ -14,4 +14,4 @@ env:
   - PARALLEL=2
 
 script:
-- docker run -it --rm -v ${TRAVIS_BUILD_DIR}:/usr/src/espurna -p ${PARALLEL}
+- docker run -it --rm -v ${TRAVIS_BUILD_DIR}:/usr/src/espurna lobradov/docker-espurna-builder -p ${PARALLEL}
