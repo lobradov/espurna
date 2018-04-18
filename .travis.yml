@@ -8,10 +8,13 @@ services:
 install:
   - docker pull lobradov/docker-espurna-builder
 
+before_script:
+  - env > env-file
+
 env:
   - PARALLEL=0
   - PARALLEL=1
   - PARALLEL=2
 
 script:
-- docker run -it --rm -v ${TRAVIS_BUILD_DIR}:/usr/src/espurna lobradov/docker-espurna-builder -p ${PARALLEL}
+- docker run -it --rm --env-file env-file -v ${TRAVIS_BUILD_DIR}:/usr/src/espurna lobradov/docker-espurna-builder -p ${PARALLEL}
