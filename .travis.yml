@@ -9,6 +9,7 @@ install:
   - docker pull lobradov/docker-espurna-builder
 
 before_script:
+  - env
   - env > env-file
 
 env:
