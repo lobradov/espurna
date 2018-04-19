@@ -24,7 +24,7 @@ while getopts "lp" opt; do
       par_thread=${BUILDER_THREAD:0}
       par_total_threads=${BUILDER_TOTAL_THREADS:4}
       if [ ${par_thread} -ne ${par_thread} ||
-           ${par_total_threads -ne ${par_total_threads}} ]; then
+           ${par_total_threads} -ne ${par_total_threads} ]; then
              echo "Parallel threads should be a number."
              exit
       fi
@@ -83,7 +83,7 @@ echo "Building firmware images..."
 mkdir -p ../firmware/espurna-$version
 
 if [ ${par_build} ]; then
-  to_build=`echo ${environments} | awk -v par_thread=${par_thread} -v par_total_threads=${par_total_threads} '{ for (i = 1; i <= NF; i++) if (++j % $par_total_threads == par_thread ) print \$i; }'`
+  to_build=`echo ${environments} | awk -v par_thread=${par_thread} -v par_total_threads=${par_total_threads} '{ for (i = 1; i <= NF; i++) if (++j % par_total_threads == par_thread ) print \$i; }'`
 else
   to_build=${environments}
 fi
