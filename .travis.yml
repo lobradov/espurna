@@ -9,13 +9,16 @@ install:
   - docker pull lobradov/docker-espurna-builder
 
 before_script:
-  - env
-  - env > env-file
+  - env | grep -e BUILD_ -e TRAVIS_ > env-file
+
 
 env:
-  - PARALLEL=0
-  - PARALLEL=1
-  - PARALLEL=2
+  global:
+    - BUILDER_TOTAL_THREADS=3
+  matrix:
+    - BUILDER_THREAD=0
+    - BUILDER_THREAD=1
+    - BUILDER_THREAD=2
 
 script:
-- docker run -it --rm --env-file env-file -v ${TRAVIS_BUILD_DIR}:/usr/src/espurna lobradov/docker-espurna-builder -p ${PARALLEL}
+- docker run -it --rm --env-file env-file -v ${TRAVIS_BUILD_DIR}:/usr/src/espurna lobradov/docker-espurna-builder -p
