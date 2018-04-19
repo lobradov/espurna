@@ -14,11 +14,9 @@ before_script:
 
 env:
   global:
-    - BUILDER_TOTAL_THREADS=3
+    - BUILDER_TOTAL_THREADS=1
   matrix:
     - BUILDER_THREAD=0
-    - BUILDER_THREAD=1
-    - BUILDER_THREAD=2
 
 script:
 - docker run -it --rm --env-file env-file -v ${TRAVIS_BUILD_DIR}:/usr/src/espurna lobradov/docker-espurna-builder -p
