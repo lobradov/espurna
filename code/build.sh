@@ -23,7 +23,7 @@ while getopts "lp" opt; do
       par_build=1
       par_thread=${BUILDER_THREAD:0}
       par_total_threads=${BUILDER_TOTAL_THREADS:4}
-      if [ ${par_thread} -ne ${par_thread} ||
+      if [ ${par_thread} -ne ${par_thread} ||\
            ${par_total_threads} -ne ${par_total_threads} ]; then
              echo "Parallel threads should be a number."
              exit
