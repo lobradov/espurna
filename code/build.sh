@@ -57,7 +57,7 @@ mkdir -p firmware
 if [ ! -e node_modules/gulp/bin/gulp.js ]; then
     echo "--------------------------------------------------------------"
     echo "Installing dependencies..."
-    npm install --only=dev
+    time npm link --only=dev
 fi
 
 echo "--------------------------------------------------------------"
@@ -70,7 +70,7 @@ sed -i -e "s/APP_REVISION            \".*\"/APP_REVISION            \"$revision\
 # Recreate web interface
 echo "--------------------------------------------------------------"
 echo "Building web interface..."
-node node_modules/gulp/bin/gulp.js || exit
+time node node_modules/gulp/bin/gulp.js || exit
 
 # Build all the required firmware images
 echo "--------------------------------------------------------------"
@@ -85,7 +85,7 @@ fi
 
 for environment in $to_build; do
     echo "* espurna-$version-$environment.bin"
-    platformio run --silent --environment $environment || break
+    time platformio run --silent --environment $environment || break
     mv .pioenvs/$environment/firmware.bin ../firmware/espurna-$version/espurna-$version-$environment.bin
 done
 echo "--------------------------------------------------------------"
