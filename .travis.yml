@@ -9,7 +9,7 @@ install:
   - docker pull lobradov/docker-espurna-builder
 
 before_script:
-  - env | grep -e BUILD_ -e TRAVIS_ > env-file
+  - env | grep -e BUILDER_ -e TRAVIS_ > env-file
 
 
 env:
