@@ -90,7 +90,7 @@ fi
 
 for environment in $to_build; do
     echo "* espurna-$version-$environment.bin"
-    time platformio run --silent --environment $environment || break
+    time platformio run --silent --environment $environment || exit 1
     mv .pioenvs/$environment/firmware.bin ../firmware/espurna-$version/espurna-$version-$environment.bin
 done
 echo "--------------------------------------------------------------"
